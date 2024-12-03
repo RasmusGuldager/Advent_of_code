@@ -27,5 +27,5 @@ with open("cleaned_data_pt2.txt", "r") as file:
         elif "mul" in line and instruction == 1:
             answer += eval(line)
     
-    print(answer)
+    #print(answer) # answer is 95846796
             
