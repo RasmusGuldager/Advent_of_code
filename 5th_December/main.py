@@ -116,3 +116,6 @@ with open("data.txt", "r") as file:
 
 
     print(sum_of_middle_page_numbers_part_2) # Answer is lower than 5353
+
+
+    print(page_number_indicies_left)
