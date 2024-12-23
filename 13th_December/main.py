@@ -28,8 +28,8 @@ def get_data():
             buttons_b[i][1] = int(buttons_b[i][1][2:])
 
             prizes[i] = prizes[i].split(", ")
-            prizes[i][0] = int(prizes[i][0][2:])
-            prizes[i][1] = int(prizes[i][1][2:])
+            prizes[i][0] = int(prizes[i][0][2:]) + 10000000000000
+            prizes[i][1] = int(prizes[i][1][2:]) + 10000000000000
 
             
     return buttons_a, buttons_b, prizes
@@ -50,10 +50,9 @@ def find_price(button_a, button_b, prize):
             return offset_a * 3 + offset_b
         
         offset_b += 1
-        
 
 
-def main():
+def part_1():
     buttons_a, buttons_b, prizes = get_data()
     price = 0
     for i in range(len(buttons_a)):
@@ -61,5 +60,34 @@ def main():
 
     print(price)
 
+
+def find_price_part_2(button_a, button_b, prize):
+    offset_b = prize[1] // button_b[1]
+
+    while True:
+        print(offset_b)
+        if prize[0] - button_b[0] * offset_b % button_a[0] == 0:
+            offset_a = (prize[0] - button_b[0] * offset_b) // button_a[0]
+            print("Done")
+            return offset_a * 3 + offset_b
+        else:
+            offset_b -= 1
+        
+        if offset_b < 0:
+            print("Done")
+            return False
+
+        
+def part_2():
+    buttons_a, buttons_b, prizes = get_data()
+    price = 0
+    for i in range(len(buttons_a)):
+        price += find_price_part_2(buttons_a[i], buttons_b[i], prizes[i])
+
+    print(price)
+
+
 if __name__ == "__main__":
-    main()
+    #part_1()
+
+    part_2()
