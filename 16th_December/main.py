@@ -1,3 +1,5 @@
+import numpy as np
+
 class Spot:
     def __init__(self, y, x):
         self.dist = 0
@@ -75,7 +77,7 @@ def dijkstra(start, end):
         closed_set.append(current)
 
         if current.dist > 78428:
-            return 0, closed_set
+            return 99999, closed_set
 
         for i in range(len(current.neighbors)):
             neighbor = current.neighbors[i]
@@ -104,7 +106,7 @@ def main(grid, data):
 
     print(f"Total cost of shortest path is {shortest_path}")
 
-    is_on_path = 0
+    is_on_path = []
 
     list_of_nodes = []
     for i in range(len(closed_set)):
@@ -112,7 +114,6 @@ def main(grid, data):
     
     for i in range(len(closed_set)):
         print(100 * i // len(closed_set))
-
  
         for x in range(len(grid)):
             for y in range(len(grid[x])):
@@ -120,15 +121,32 @@ def main(grid, data):
 
         path_weight = dijkstra(list_of_nodes[i][0], end)[0]
 
-        if path_weight + list_of_nodes[i][1] == shortest_path:
-            is_on_path += 1
+        if path_weight + list_of_nodes[i][1] <= shortest_path:
+            is_on_path.append([list_of_nodes[i][0].x, list_of_nodes[i][0].y])
 
-    print(f"Number of nodes on the shortest path is {is_on_path}") #451
+    print(f"Number of nodes on the shortest path is {len(is_on_path)}") #451
+
+    maze = np.array(len(data) * len(data[0]) * [" "]).reshape(len(data), len(data[0]))
+
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            if data[i][j] == "#":
+                maze[i][j] = "#"
+            elif [j, i] in is_on_path:
+                maze[i][j] = "X"
+            else:
+                maze[i][j] = "."
+    
+    with open("maze.txt", "w") as file:
+        for i in range(len(maze)):
+            for j in range(len(maze[i])):
+                file.write(maze[i][j])
+            file.write("\n")
 
 
 if __name__ == '__main__':
-    #data = get_data()
-    data = get_test_data()
+    data = get_data()
+    #data = get_test_data()
 
     grid = create_grid(data)
 
