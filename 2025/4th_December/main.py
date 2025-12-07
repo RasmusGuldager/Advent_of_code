@@ -16,10 +16,10 @@ class Spot:
         self.x: int = x
         self.y: int = y
         self.paper: bool = paper
-        self.neighbors: list[bool] = []
-        self.paper_neighbors: int = 0
+        self.paper_neighbors: int
 
     def find_neighbors(self, grid):
+        self.paper_neighbors = 0
         directions = [
             (-1, -1),
             (-1, 0),
@@ -39,7 +39,6 @@ class Spot:
             ny = self.y + dy
 
             if 0 <= nx < max_x and 0 <= ny < max_y:
-                self.neighbors.append(grid[ny][nx].paper)
                 self.paper_neighbors += grid[ny][nx].paper
 
 
@@ -72,7 +71,24 @@ def part_1(grid):
 
 
 def part_2(grid):
-    pass
+    accessible_paper = 0
+    paper_removed = 1
+
+    while paper_removed > 0:
+        paper_removed = 0
+        for y in range(max_y):
+            for x in range(max_x):
+                grid[y][x].find_neighbors(grid)
+
+        for y in range(max_y):
+            for x in range(max_x):
+                if grid[y][x].paper:
+                    if grid[y][x].paper_neighbors < 4:
+                        accessible_paper += 1
+                        paper_removed += 1
+                        grid[y][x].paper = False
+
+    print("Part 2:", accessible_paper)
 
 
 if __name__ == "__main__":
